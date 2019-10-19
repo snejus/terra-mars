@@ -1,0 +1,17 @@
+version: '3.1'
+
+services:
+  terra_mars_web:
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    volumes:
+      - ./terra_mars:/terra_mars
+
+  celery:
+    volumes:
+      - ./terra_mars:/terra_mars
+
+  celery-beat:
+    volumes:
+      - ./terra_mars:/terra_mars

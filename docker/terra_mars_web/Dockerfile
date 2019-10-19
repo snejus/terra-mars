@@ -7,6 +7,8 @@ WORKDIR /terra_mars
 RUN apk update
 
 ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+
 RUN set -e; \
     apk add --no-cache --virtual .build-deps \
     gcc \
@@ -18,5 +20,6 @@ RUN set -e; \
     linux-headers \
     pcre-dev \
     ;
-
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
+#RUN pip install --upgrade pip
 RUN pip install -r requirements.txt --src /usr/local/src

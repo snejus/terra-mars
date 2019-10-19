@@ -43,7 +43,7 @@ services:
         - POSTGRES_USER=django
         - MYSQL_PASSWORD=django123
     volumes:
-      - terra_mars_db:/var/lib/postgres
+      - terra_mars_db:/var/lib/postgres/data
 
   redis:
     image: redis:alpine
