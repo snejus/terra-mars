@@ -6,7 +6,7 @@ from django.db import models
 class MapName(Enum):
     DEFAULT = "Default"
     HELLAS = "Hellas"
-    Elysium = "Elysium"
+    ELYSIUM = "Elysium"
 
 
 class CorporationName(Enum):
