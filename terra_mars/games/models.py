@@ -36,8 +36,11 @@ class CorporationName(Enum):
 
 class Corporation(models.Model):
     name = models.CharField(
-        max_length=32, choices=[(tag.value, tag.name) for tag in CorporationName]
+        max_length=32, choices=[(tag.name, tag.value) for tag in CorporationName]
     )
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class Player(models.Model):
@@ -63,6 +66,9 @@ class Game(models.Model):
     prelude = models.BooleanField()
     colonies = models.BooleanField()
 
+    def __str__(self) -> str:
+        return f"{self.date} - {self.played_map} - {self.winner.name}"
+
 
 class PlayerGameStats(models.Model):
     game = models.ForeignKey(
@@ -84,3 +90,6 @@ class PlayerGameStats(models.Model):
     green_cards = models.PositiveSmallIntegerField()
     blue_cards = models.PositiveSmallIntegerField()
     resources = models.PositiveSmallIntegerField()
+
+    def __str__(self) -> str:
+        return f"{str(self.game)}: {self.player.name}"
