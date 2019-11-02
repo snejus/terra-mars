@@ -1,4 +1,5 @@
 import csv
+from collections import defaultdict
 from datetime import date
 from typing import Dict, List
 
@@ -33,56 +34,13 @@ def import_games_to_database() -> None:
     with open(CSV_PATH, "r") as file:
         reader = csv.reader(file, delimiter=",")
 
-        previous_row_game_index = 0
+        indexed_games = defaultdict(list)
         for raw_row in reader:
             row = _process_raw_row(raw_row)
+            indexed_games[row["game_index"]].append(row)
 
-            if row["game_index"] != previous_row_game_index:
-                # initialise new game
-                month, day, year = [int(number) for number in row["date"].split("/")]
-                game = Game(
-                    date=date(year, month, day),
-                    played_map=row["played_map"],
-                    generations_count=row["generations_count"],
-                    players_count=row["players_count"],
-                    venus_next=False,
-                    prelude=True if row["prelude"] == 1 else False,
-                    colonies=True if row["colonies"] == 1 else False,
-                )
-
-            player, created = Player.objects.get_or_create(
-                name=row["player_name"], defaults={"name": row["player_name"]}
-            )
-
-            if created:
-                player.save()
-
-            if row["winner"] == 1:
-                game.winner = player
-                game.save()
-
-            corporation, created = Corporation.objects.get_or_create(
-                name=row["player_corporation"],
-                defaults={"name": row["player_corporation"]},
-            )
-
-            if created:
-                corporation.save()
-
-            player_game_stats = PlayerGameStats(
-                player=player,
-                corporation=corporation,
-                terraforming_rating=row["terraforming_rating"],
-                milestones=row["milestones"],
-                awards=row["awards"],
-                greeneries=row["greeneries"],
-                cities=row["cities"],
-                red_cards=row["red_cards"],
-                green_cards=row["green_cards"],
-                blue_cards=row["blue_cards"],
-                resources=row["resources"],
-                total_score=row["total_score"],
-            )
+    for game_rows in indexed_games.values():
+        _add_game_to_database(game_rows)
 
 
 def _process_raw_row(raw_row: List[str]) -> Dict[str, str]:
@@ -91,3 +49,55 @@ def _process_raw_row(raw_row: List[str]) -> Dict[str, str]:
         row[name] = raw_row[index]
 
     return row
+
+
+def _add_game_to_database(game_rows: List[Dict[str, str]]) -> None:
+    month, day, year = [int(number) for number in game_rows[0]["date"].split("/")]
+    game = Game(
+        date=date(year, month, day),
+        played_map=game_rows[0]["played_map"],
+        generations_count=int(game_rows[0]["generations_count"]),
+        players_count=int(game_rows[0]["players_count"]),
+        venus_next=False,
+        prelude=True if game_rows[0]["prelude"] == "1" else False,
+        colonies=True if game_rows[0]["colonies"] == "1" else False,
+    )
+
+    incomplete_stats_models = []
+    for row in game_rows:
+        player, created = Player.objects.get_or_create(
+            name=row["player_name"], defaults={"name": row["player_name"]}
+        )
+        if created:
+            player.save()
+
+        if row["winner"] == "1":
+            game.winner = player
+            game.save()
+
+        corporation, created = Corporation.objects.get_or_create(
+            name=row["player_corporation"],
+            defaults={"name": row["player_corporation"]},
+        )
+        if created:
+            corporation.save()
+
+        stats = PlayerGameStats(
+            player=player,
+            corporation=corporation,
+            terraforming_rating=int(row["terraforming_rating"]),
+            milestones=int(row["milestones"]),
+            awards=int(row["awards"]),
+            greeneries=int(row["greeneries"]),
+            cities=int(row["cities"]),
+            red_cards=int(row["red_cards"]),
+            green_cards=int(row["green_cards"]),
+            blue_cards=int(row["blue_cards"]),
+            resources=int(row["resources"]),
+            total_score=int(row["total_score"]),
+        )
+        incomplete_stats_models.append(stats)
+
+    for stats in incomplete_stats_models:
+        stats.game = game
+        stats.save()
