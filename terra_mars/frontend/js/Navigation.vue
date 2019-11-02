@@ -17,6 +17,11 @@ export default {
           text: 'Games',
           page: '/games',
         },
+        {
+          id: 1,
+          text: 'Players',
+          page: '/players',
+        },
       ],
     };
   },
