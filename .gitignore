@@ -1,2 +1,4 @@
 node_modules/
 terra-mars-initial-data.csv
+terra_mars/frontend/static/bundles/
+terra_mars/webpack-stats.json
