@@ -1,7 +1,5 @@
 import csv
 
-from games.models import Player
-
 CSV_PATH = "./games/initial_import/terra-mars-initial-data.csv"
 
 
