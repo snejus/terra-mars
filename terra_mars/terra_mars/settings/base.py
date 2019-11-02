@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "webpack_loader",
     "games",
+    "frontend",
 ]
 
 MIDDLEWARE = [
@@ -118,6 +120,12 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = "/terra_mars/static_root/"
 
+WEBPACK_LOADER = {
+    "DEFAULT": {
+        "BUNDLE_DIR_NAME": "bundles/",
+        "STATS_FILE": os.path.join(BASE_DIR, "..", "webpack-stats.json"),
+    }
+}
 
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
