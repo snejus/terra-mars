@@ -86,9 +86,9 @@ class PlayerGameStats(models.Model):
     milestones = models.PositiveSmallIntegerField()
     greeneries = models.PositiveSmallIntegerField()
     cities = models.PositiveSmallIntegerField()
-    red_cards = models.PositiveSmallIntegerField()
-    green_cards = models.PositiveSmallIntegerField()
-    blue_cards = models.PositiveSmallIntegerField()
+    red_cards = models.SmallIntegerField()
+    green_cards = models.SmallIntegerField()
+    blue_cards = models.SmallIntegerField()
     resources = models.PositiveSmallIntegerField()
 
     def __str__(self) -> str:
