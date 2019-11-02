@@ -84,12 +84,14 @@ class PlayerGameStats(models.Model):
 
     terraforming_rating = models.PositiveSmallIntegerField()
     milestones = models.PositiveSmallIntegerField()
+    awards = models.PositiveSmallIntegerField()
     greeneries = models.PositiveSmallIntegerField()
     cities = models.PositiveSmallIntegerField()
     red_cards = models.SmallIntegerField()
     green_cards = models.SmallIntegerField()
     blue_cards = models.SmallIntegerField()
     resources = models.PositiveSmallIntegerField()
+    total_score = models.PositiveSmallIntegerField()
 
     def __str__(self) -> str:
         return f"{str(self.game)}: {self.player.name}"
