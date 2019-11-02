@@ -6,17 +6,11 @@
 ## 🚀 Deployment
 ```
 make build
-```
-
-```
 make migrate
-```
-
-```
 make up
 ```
 
-Navigate to `localhost:8000` or `<your docker machine ip>:800` if you use `docker-machine`
+Navigate to `localhost:8000` or `<your docker machine ip>:8000` if you use `docker-machine`
 
 To stop the containers, run `make down`
 
