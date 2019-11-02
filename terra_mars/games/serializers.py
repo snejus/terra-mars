@@ -16,6 +16,8 @@ class CorporationSerializer(serializers.ModelSerializer):
 
 
 class GameSerializer(serializers.ModelSerializer):
+    winner = PlayerSerializer(read_only=True)
+
     class Meta:
         model = Game
         fields = (
@@ -32,6 +34,9 @@ class GameSerializer(serializers.ModelSerializer):
 
 
 class PlayerGameStatsSerializer(serializers.ModelSerializer):
+    player = PlayerSerializer(read_only=True)
+    corporation = CorporationSerializer(read_only=True)
+
     class Meta:
         model = PlayerGameStats
         fields = (
