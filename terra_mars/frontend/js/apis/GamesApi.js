@@ -13,4 +13,14 @@ export default class GamesApi {
         console.log(e);
       });
   }
+
+  static getStats() {
+    const url = '/api/player_game_stats/';
+    return axios
+      .get(url)
+      .then((response) => response.data)
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 }

@@ -19,6 +19,7 @@ module.exports = {
     'vue',
   ],
   rules: {
-    "no-param-reassign": ["error", {"props": false}]
+    "no-param-reassign": ["error", {"props": false}],
+    "no-plusplus": "off"
   },
 };
