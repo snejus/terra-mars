@@ -12,3 +12,6 @@ make-migrations:
 
 migrate:
 	DJANGO_SETTINGS_MODULE=terra_mars.settings.development docker-compose -f docker-compose.yml -f docker-compose.development.yml run --rm terra_mars_web python manage.py migrate
+
+import-initial-data:
+	DJANGO_SETTINGS_MODULE=terra_mars.settings.development docker-compose -f docker-compose.yml -f docker-compose.development.yml run --rm terra_mars_web python manage.py import_initial_data

@@ -4,7 +4,6 @@ services:
   terra_mars_web:
     build:
       context: .
-      dockerfile: docker/terra_mars_web/Dockerfile
     environment:
       - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
     depends_on:
@@ -15,7 +14,6 @@ services:
   celery:
     build:
       context: .
-      dockerfile: docker/terra_mars_web/Dockerfile
     command: celery -A terra_mars worker -l info
     environment:
       - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
@@ -26,7 +24,6 @@ services:
   celery-beat:
     build:
       context: .
-      dockerfile: docker/terra_mars_web/Dockerfile
     command: celery -A terra_mars beat -l info --pidfile /tmp/celerybeat.pid
     environment:
       - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
