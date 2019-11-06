@@ -4,8 +4,8 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 export default class GamesApi {
-  static getPlayers() {
-    const url = '/api/player/';
+  static getPlayerSummaries() {
+    const url = '/api/playersummary/';
     return axios
       .get(url)
       .then((response) => response.data)

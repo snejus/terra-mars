@@ -77,7 +77,9 @@ class PlayerSummarySerializer(serializers.ModelSerializer):
 
     def get_favourite_corporation(self, player: Player) -> Tuple[Any, int]:
         corporations = PlayerGameStats.objects.filter(player=player).values(
-            "corporation__name"
+            "corporation__display_name"
         )
 
-        return Counter([c["corporation__name"] for c in corporations]).most_common(1)[0]
+        return Counter(
+            [c["corporation__display_name"] for c in corporations]
+        ).most_common(1)[0]
