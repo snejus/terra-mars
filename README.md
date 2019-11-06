@@ -5,10 +5,13 @@
 
 ## 🚀 Deployment
 ```
+npm ci
+npm run build
 make build
 make migrate
 make up
 ```
+You can run `npm run watch` in order to automatically rebuild frontend files whenever they change
 
 Navigate to `localhost:8000` or `<your docker machine ip>:8000` if you use `docker-machine`
 
