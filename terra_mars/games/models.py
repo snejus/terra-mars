@@ -9,35 +9,13 @@ class MapName(Enum):
     ELYSIUM = "Elysium"
 
 
-class CorporationName(Enum):
-    CREDICOR = "Credicor"
-    ECOLINE = "Ecoline"
-    HELION = "Helion"
-    MINING_GUILD = "Mining Guild"
-    INVENTRIX = "Inventrix"
-    INTERPLANETARY_CINEMATICS = "Interplanetary Cinematics"
-    PHOBOLOG = "Phobolog"
-    SATURN_SYSTEMS = "Saturn Systems"
-    TERACTOR = "Teractor"
-    THARSIS_REPUBLIC = "Tharsis Republic"
-    THORGATE = "Thorgate"
-    UNMI = "UNMI"
-    CHEUNG_SHING_MARS = "Cheung Shing Mars"
-    ROBINSON_INDUSTRIES = "Robinson Industries"
-    POINT_LUNA = "Point Luna"
-    VALLEY_TRUST = "Valley Trust"
-    VITOR = "Vitor"
-    ARKLIGHT = "Arklight"
-    ARIDOR = "Aridor"
-    POLYPHEMOS = "Polyphemos"
-    POSEIDON = "Poseidon"
-    STORMCRAFT_INCORPORATED = "Stormcraft Incorporated"
-
-
 class Corporation(models.Model):
-    name = models.CharField(
-        max_length=32, choices=[(tag.name, tag.value) for tag in CorporationName]
-    )
+    display_name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32)
+
+    def save(self, *args, **kwargs):
+        self.name = self.display_name.replace(" ", "-").lower()
+        super(Corporation, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.name
