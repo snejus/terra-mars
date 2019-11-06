@@ -6,6 +6,7 @@ from games.serializers import (
     GameSerializer,
     PlayerGameStatsSerializer,
     PlayerSerializer,
+    PlayerSummarySerializer,
 )
 
 
@@ -27,3 +28,8 @@ class GameViewSet(viewsets.ModelViewSet):
 class PlayerGameStatsViewSet(viewsets.ModelViewSet):
     queryset = PlayerGameStats.objects.all()
     serializer_class = PlayerGameStatsSerializer
+
+
+class PlayerSummaryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Player.objects.all()
+    serializer_class = PlayerSummarySerializer
