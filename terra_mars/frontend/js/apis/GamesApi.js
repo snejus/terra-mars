@@ -15,7 +15,7 @@ export default class GamesApi {
   }
 
   static getStats() {
-    const url = '/api/player_game_stats/';
+    const url = '/api/playergamestats/';
     return axios
       .get(url)
       .then((response) => response.data)
