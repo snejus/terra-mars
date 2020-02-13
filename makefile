@@ -8,10 +8,10 @@ down:
 	docker-compose -f docker-compose.yml -f docker-compose.development.yml down
 
 makemigrations:
-	docker-compose -f docker-compose.yml -f docker-compose.development.yml run web python manage.py makemigrations
+	docker-compose -f docker-compose.yml -f docker-compose.development.yml run --rm web python manage.py makemigrations
 
 migrate:
 	docker-compose -f docker-compose.yml -f docker-compose.development.yml run --rm web python manage.py migrate
 
-import-initial-data:
+importdata:
 	docker-compose -f docker-compose.yml -f docker-compose.development.yml run --rm web python manage.py import_initial_data

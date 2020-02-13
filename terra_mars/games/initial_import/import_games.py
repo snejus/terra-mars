@@ -34,6 +34,8 @@ def import_games_to_database() -> None:
     with open(CSV_PATH, "r") as file:
         reader = csv.reader(file, delimiter=",")
 
+        next(reader)
+
         indexed_games = defaultdict(list)
         for raw_row in reader:
             row = _process_raw_row(raw_row)
@@ -52,15 +54,15 @@ def _process_raw_row(raw_row: List[str]) -> Dict[str, str]:
 
 
 def _add_game_to_database(game_rows: List[Dict[str, str]]) -> None:
-    month, day, year = [int(number) for number in game_rows[0]["date"].split("/")]
+    year, month, day = [int(number) for number in game_rows[0]["date"].split("-")]
     game = Game(
         date=date(year, month, day),
         played_map=game_rows[0]["played_map"],
         generations_count=int(game_rows[0]["generations_count"]),
         players_count=int(game_rows[0]["players_count"]),
         venus_next=False,
-        prelude=True if game_rows[0]["prelude"] == "1" else False,
-        colonies=True if game_rows[0]["colonies"] == "1" else False,
+        prelude=game_rows[0]["prelude"] == "1",
+        colonies=game_rows[0]["colonies"] == "1",
     )
 
     incomplete_stats_models = []
