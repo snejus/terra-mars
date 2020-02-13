@@ -79,9 +79,9 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "HOST": "db",
-        "NAME": "terra_mars_db",
+        "NAME": "django",
         "USER": "django",
-        "PASSWORD": "django123",
+        "PASSWORD": "django",
         "PORT": "5432",
     }
 }
