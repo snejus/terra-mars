@@ -107,13 +107,4 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = "/terra_mars/static_root/"
 
-CELERY_BROKER_URL = "redis://redis:6379"
-CELERY_RESULT_BACKEND = "redis://redis:6379"
-CELERY_ACCEPT_CONTENT = ["application/json"]
-CELERY_TASK_SERIALIZER = "json"
-CELERY_RESULT_SERIALIZER = "json"
-CELERY_BEAT_SCHEDULE_FILENAME = "/tmp/celerybeat-schedule"
-CELERY_PIDFILE = "/tmp/celery.pid"
-
-
 AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)

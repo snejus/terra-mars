@@ -1,3 +1,5 @@
+install: build migrate
+
 build:
 	docker-compose -f docker-compose.yml -f docker-compose.development.yml build
 
