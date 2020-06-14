@@ -1,19 +1,19 @@
 install: build migrate
 
 build:
-	docker-compose -f docker-compose.yml -f docker-compose.development.yml build
+	docker-compose build
 
 up:
-	docker-compose -f docker-compose.yml -f docker-compose.development.yml up
+	docker-compose up
 
 down:
-	docker-compose -f docker-compose.yml -f docker-compose.development.yml down
+	docker-compose down
 
 makemigrations:
-	docker-compose -f docker-compose.yml -f docker-compose.development.yml run --rm web python manage.py makemigrations
+	docker-compose run --rm web python manage.py makemigrations
 
 migrate:
-	docker-compose -f docker-compose.yml -f docker-compose.development.yml run --rm web python manage.py migrate
+	docker-compose run --rm web python manage.py migrate
 
 importdata:
-	docker-compose -f docker-compose.yml -f docker-compose.development.yml run --rm web python manage.py import_initial_data
+	docker-compose run --rm web python manage.py import_initial_data
