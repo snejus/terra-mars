@@ -14,8 +14,8 @@
           <br>
           Games won: {{ player.games_won}}
           <br>
-          Favourite corporation: {{ player.favourite_corporation[0] }}
-          ({{ player.favourite_corporation[1] }})
+          Favourite corporation: {{ player.favourite_corporation.name }}
+          ({{ player.favourite_corporation.times_played }})
         </b-card-text>
       </b-card>
     </div>

@@ -1,5 +1,4 @@
-from collections import Counter
-from typing import Any, Tuple
+from typing import Dict, Union
 
 from rest_framework import serializers
 
@@ -9,13 +8,13 @@ from games.models import Corporation, Game, Player, PlayerGameStats
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
-        fields = ("id", "name")
+        fields = "__all__"
 
 
 class CorporationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Corporation
-        fields = ("id", "name")
+        fields = "__all__"
 
 
 class GameSerializer(serializers.ModelSerializer):
@@ -23,17 +22,7 @@ class GameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Game
-        fields = (
-            "id",
-            "date",
-            "played_map",
-            "generations_count",
-            "players_count",
-            "winner",
-            "venus_next",
-            "prelude",
-            "colonies",
-        )
+        fields = "__all__"
 
 
 class PlayerGameStatsSerializer(serializers.ModelSerializer):
@@ -42,44 +31,32 @@ class PlayerGameStatsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PlayerGameStats
-        fields = (
-            "id",
-            "game",
-            "player",
-            "corporation",
-            "terraforming_rating",
-            "milestones",
-            "greeneries",
-            "cities",
-            "red_cards",
-            "green_cards",
-            "blue_cards",
-            "resources",
-        )
+        fields = "__all__"
 
 
 class PlayerSummarySerializer(serializers.ModelSerializer):
-    games_played = serializers.SerializerMethodField("get_games_played")
-    games_won = serializers.SerializerMethodField("get_games_won")
-    favourite_corporation = serializers.SerializerMethodField(
-        "get_favourite_corporation"
-    )
+    """Read-only serializer for player's summary."""
+
+    games_played = serializers.SerializerMethodField()
+    games_won = serializers.SerializerMethodField()
+    favourite_corporation = serializers.SerializerMethodField()
 
     class Meta:
         model = Player
-        fields = ("id", "name", "games_played", "games_won", "favourite_corporation")
-
-    def get_games_played(self, player: Player) -> int:
-        return PlayerGameStats.objects.filter(player=player).count()
-
-    def get_games_won(self, player: Player) -> int:
-        return Game.objects.filter(winner=player).count()
-
-    def get_favourite_corporation(self, player: Player) -> Tuple[Any, int]:
-        corporations = PlayerGameStats.objects.filter(player=player).values(
-            "corporation__display_name"
+        fields = "__all__"
+        read_only_fields = (
+            "id",
+            "name",
+            "games_played",
+            "games_won",
+            "favourite_corporation",
         )
 
-        return Counter(
-            [c["corporation__display_name"] for c in corporations]
-        ).most_common(1)[0]
+    def get_games_played(self, player: Player) -> int:
+        return player.games_stats.count()
+
+    def get_games_won(self, player: Player) -> int:
+        return player.games_won.count()
+
+    def get_favourite_corporation(self, player: Player) -> Dict[str, Union[str, int]]:
+        return player.favourite_corp()
