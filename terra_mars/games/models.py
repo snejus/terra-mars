@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Dict, Union
 
 from django.db import models
 
@@ -9,35 +10,13 @@ class MapName(Enum):
     ELYSIUM = "Elysium"
 
 
-class CorporationName(Enum):
-    CREDICOR = "Credicor"
-    ECOLINE = "Ecoline"
-    HELION = "Helion"
-    MINING_GUILD = "Mining Guild"
-    INVENTRIX = "Inventrix"
-    INTERPLANETARY_CINEMATICS = "Interplanetary Cinematics"
-    PHOBOLOG = "Phobolog"
-    SATURN_SYSTEMS = "Saturn Systems"
-    TERACTOR = "Teractor"
-    THARSIS_REPUBLIC = "Tharsis Republic"
-    THORGATE = "Thorgate"
-    UNMI = "UNMI"
-    CHEUNG_SHING_MARS = "Cheung Shing Mars"
-    ROBINSON_INDUSTRIES = "Robinson Industries"
-    POINT_LUNA = "Point Luna"
-    VALLEY_TRUST = "Valley Trust"
-    VITOR = "Vitor"
-    ARKLIGHT = "Arklight"
-    ARIDOR = "Aridor"
-    POLYPHEMOS = "Polyphemos"
-    POSEIDON = "Poseidon"
-    STORMCRAFT_INCORPORATED = "Stormcraft Incorporated"
-
-
 class Corporation(models.Model):
-    name = models.CharField(
-        max_length=32, choices=[(tag.name, tag.value) for tag in CorporationName]
-    )
+    display_name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32)
+
+    def save(self, *args, **kwargs):
+        self.name = self.display_name.replace(" ", "-").lower()
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.name
@@ -49,18 +28,22 @@ class Player(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    def favourite_corp(self) -> Dict[str, Union[str, int]]:
+        return (
+            self.games_stats.values("corporation_id")
+            .annotate(times_played=models.Count("corporation_id"))
+            .order_by("-times_played")
+            .values("times_played", name=models.F("corporation__display_name"))[0]
+        )
+
 
 class Game(models.Model):
     date = models.DateField()
-    played_map = models.CharField(
-        max_length=16, choices=[(tag.value, tag.name) for tag in MapName]
-    )
+    played_map = models.CharField(max_length=16, choices=[(tag.value, tag.name) for tag in MapName])
     generations_count = models.PositiveSmallIntegerField()
     players_count = models.PositiveSmallIntegerField()
 
-    winner = models.ForeignKey(
-        "Player", on_delete=models.PROTECT, related_name="games_won"
-    )
+    winner = models.ForeignKey("Player", on_delete=models.PROTECT, related_name="games_won")
 
     venus_next = models.BooleanField()
     prelude = models.BooleanField()
@@ -71,16 +54,9 @@ class Game(models.Model):
 
 
 class PlayerGameStats(models.Model):
-    game = models.ForeignKey(
-        "Game", on_delete=models.CASCADE, related_name="players_game_stats"
-    )
-
-    player = models.ForeignKey(
-        "Player", on_delete=models.PROTECT, related_name="games_stats"
-    )
-    corporation = models.ForeignKey(
-        "Corporation", on_delete=models.PROTECT, related_name="games_stats"
-    )
+    game = models.ForeignKey("Game", on_delete=models.CASCADE, related_name="players_game_stats")
+    player = models.ForeignKey("Player", on_delete=models.PROTECT, related_name="games_stats")
+    corporation = models.ForeignKey("Corporation", on_delete=models.PROTECT, related_name="games_stats")
 
     terraforming_rating = models.PositiveSmallIntegerField()
     milestones = models.PositiveSmallIntegerField()

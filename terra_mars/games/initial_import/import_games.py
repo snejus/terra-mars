@@ -77,9 +77,9 @@ def _add_game_to_database(game_rows: List[Dict[str, str]]) -> None:
             game.winner = player
             game.save()
 
+        corporation_name = row["player_corporation"]
         corporation, created = Corporation.objects.get_or_create(
-            name=row["player_corporation"],
-            defaults={"name": row["player_corporation"]},
+            display_name=corporation_name, defaults={"display_name": corporation_name}
         )
         if created:
             corporation.save()
