@@ -29,7 +29,7 @@
         "vue-template-compiler": "^2.6.6",
         "webpack": "=4.28",
         "webpack-bundle-tracker": "^0.4.2-beta",
-        "webpack-cli": "^3.2.3"
+        "webpack-cli": "^3.3.12"
     },
     "scripts": {
         "build": "webpack --config webpack.config.dev.js --progress --colors --mode development",
